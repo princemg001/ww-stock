@@ -1,0 +1,152 @@
+type _ImmutableObjectStorageRefillResult = 
+ record {
+   success: opt bool;
+   topped_up_amount: opt nat;
+ };
+type _ImmutableObjectStorageRefillInformation = record {
+                                                  proposed_top_up_amount:
+                                                   opt nat;};
+type _ImmutableObjectStorageCreateCertificateResult = 
+ record {
+   blob_hash: text;
+   method: text;
+ };
+type UserRole__1 = 
+ variant {
+   admin;
+   guest;
+   user;
+ };
+type UserRole = 
+ variant {
+   admin;
+   owner;
+   user;
+ };
+type UserPublic = 
+ record {
+   role: UserRole;
+   userId: text;
+   userName: text;
+ };
+type Timestamp = int;
+type StockUpdateResult = 
+ variant {
+   err: text;
+   ok: Product;
+ };
+type SizeChange = 
+ record {
+   inQty: nat;
+   outQty: nat;
+   size: text;
+ };
+type SessionInfo = 
+ record {
+   role: UserRole;
+   userId: text;
+   userName: text;
+ };
+type ProductId = nat;
+type ProductColor = 
+ record {
+   imageUrl: text;
+   name: text;
+ };
+type Product = 
+ record {
+   availableSizes: vec text;
+   colors: vec ProductColor;
+   id: nat;
+   image: ExternalBlob;
+   name: text;
+   stock: vec record {
+                text;
+                nat;
+              };
+ };
+type LogType = 
+ variant {
+   IN;
+   OUT;
+ };
+type LogId = nat;
+type Log = 
+ record {
+   editedBy: opt text;
+   hasBeenEdited: bool;
+   id: LogId;
+   logType: LogType;
+   productId: ProductId;
+   productName: text;
+   qty: nat;
+   remark: text;
+   size: text;
+   timestamp: Timestamp;
+   userId: text;
+   userName: text;
+ };
+type ExternalBlob = blob;
+service : {
+  _immutableObjectStorageBlobsAreLive: (hashes: vec blob) -> (vec bool) query;
+  _immutableObjectStorageBlobsToDelete: () -> (vec blob) query;
+  _immutableObjectStorageConfirmBlobDeletion: (blobs: vec blob) -> ();
+  _immutableObjectStorageCreateCertificate: (blobHash: text) ->
+   (_ImmutableObjectStorageCreateCertificateResult);
+  _immutableObjectStorageRefillCashier: (refillInformation:
+   opt _ImmutableObjectStorageRefillInformation) ->
+   (_ImmutableObjectStorageRefillResult);
+  _immutableObjectStorageUpdateGatewayPrincipals: () -> ();
+  _initializeAccessControl: () -> ();
+  addProduct: (adminUserId: text, name: text, image: ExternalBlob,
+   availableSizes: vec text, initialStock: vec record {
+                                                 text;
+                                                 nat;
+                                               }) ->
+   (variant {
+      err: text;
+      ok: Product;
+    });
+  assignCallerUserRole: (user: principal, role: UserRole__1) -> ();
+  createNewUser: (adminUserId: text, newUserId: text, newPin: text, newName:
+   text, roleText: text) -> (variant {
+                               err: text;
+                               ok: SessionInfo;
+                             });
+  deleteLog: (adminUserId: text, logId: nat) -> (variant {
+                                                   err: text;
+                                                   ok;
+                                                 });
+  getCallerUserRole: () -> (UserRole__1) query;
+  getLogs: () -> (vec Log) query;
+  getProduct: (id: ProductId) -> (opt Product) query;
+  getProducts: () -> (vec Product) query;
+  getTotalProducts: () -> (nat) query;
+  getTotalStock: () -> (nat) query;
+  isCallerAdmin: () -> (bool) query;
+  listAllUsers: (adminUserId: text) ->
+   (variant {
+      err: text;
+      ok: vec UserPublic;
+    }) query;
+  login: (userId: text, pin: text) -> (opt SessionInfo);
+  removeUser: (adminUserId: text, targetUserId: text) ->
+   (variant {
+      err: text;
+      ok;
+    });
+  seedUsers: () -> ();
+  updateLog: (logId: nat, newRemark: text, callerUserId: text) ->
+   (variant {
+      err: text;
+      ok: Log;
+    });
+  updateProduct: (adminUserId: text, productId: ProductId, newName: opt text,
+   newImage: opt ExternalBlob, newAvailableSizes: opt vec text) ->
+   (variant {
+      err: text;
+      ok: Product;
+    });
+  updateStock: (productId: ProductId, sizeChanges: vec SizeChange, remark:
+   text, userId: text, userName: text) -> (StockUpdateResult);
+}

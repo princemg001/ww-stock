@@ -1,0 +1,28 @@
+{
+  "overview": "WW Stock is a full-stack inventory management web app for Indian ethnic wear clothing. It supports multi-product catalog management with custom sizes per product, color sub-options with photos, IN/OUT stock tracking, activity logs, role-based access (admin/user), and PIN-based login. Built for clothing retailers managing sarees, kurtas, lehengas, and other garments.",
+  "features": [
+    "PIN-based login with show/hide toggle",
+    "Admin and regular user roles",
+    "Custom size options per product (admin-defined)",
+    "Color options as sub-products with individual photos and stock",
+    "Real-time total stock and product count for all users",
+    "Stock IN/OUT entry with per-size tracking",
+    "Product-specific background images on stock pages",
+    "Active logs with green IN / red OUT badges",
+    "Admin: add products, manage users, export logs to Excel",
+    "All users: view logs, edit own entry once",
+    "Indian ethnic wear background imagery at 20-25% opacity",
+    "Application credits: Mitul Gopani & Krenil Vaghasiya"
+  ],
+  "category": "productivity",
+  "tags": [
+    "inventory",
+    "clothing",
+    "stock-management",
+    "indian-ethnic-wear",
+    "retail",
+    "admin-dashboard",
+    "product-catalog"
+  ],
+  "last_updated": "2026-04-24T11:25:40.425Z"
+}

@@ -1,0 +1,96 @@
+// Version: 3.0.0
+type Data__791452850<K, V> =
+  {var count : Nat__490723111; kvs : [var ?(K, V)]};
+type ExternalBlob__246066408 = Blob;
+type Internal__8484328<K, V> =
+  {children : [var ?Node__46230540<K, V>]; data : Data__791452850<K, V>};
+type Leaf__809889148<K, V> = {data : Data__791452850<K, V>};
+type List__415060402<T> = List__790383201<T>;
+type List__790383201<T> =
+  {
+    var blockIndex : Nat__490723111;
+    var blocks : [var [var ?T]];
+    var elementIndex : Nat__490723111
+  };
+type LogId__472453763 = Nat;
+type LogType__557556697 = {#IN; #OUT};
+type Log__105830546 =
+  {
+    editedBy : ?Text;
+    hasBeenEdited : Bool;
+    id : LogId__472453763;
+    logType : LogType__557556697;
+    productId : ProductId__160010635;
+    productName : Text;
+    qty : Nat;
+    remark : Text;
+    size : Text;
+    timestamp : Timestamp__301639476;
+    userId : Text;
+    userName : Text
+  };
+type Map__158565046<K, V> = Map__297112838<K, V>;
+type Map__297112838<K, V> =
+  {var root : Node__46230540<K, V>; var size : Nat__490723111};
+type Map__605269027<K, V> = Map__158565046<K, V>;
+type Nat__490723111 = Nat__920180692;
+type Nat__920180692 = Nat;
+type Node__46230540<K, V> =
+  {#internal : Internal__8484328<K, V>; #leaf : Leaf__809889148<K, V>};
+type OldUserRole__14139028 = {#admin; #owner; #user};
+type OldUser__433019771 =
+  {pin : Text; role : OldUserRole__14139028; userId : Text; userName : Text};
+type ProductColor__819461792 = {imageUrl : Text; name : Text};
+type ProductId__160010635 = Nat;
+type Product__750902660 =
+  {
+    availableSizes : [Text];
+    colors : [ProductColor__819461792];
+    id : Nat;
+    image : ExternalBlob__246066408;
+    name : Text;
+    stock : [(Text, Nat)]
+  };
+type Timestamp__301639476 = Int;
+type UserRole__1054455867 = {#admin; #guest; #user};
+type UserRole__41952412 = {#admin; #owner; #user};
+type User__98118558 =
+  {pin : Text; role : UserRole__41952412; userId : Text; userName : Text};
+actor ({
+  stable accessControlState :
+    {
+      var adminAssigned : Bool;
+      userRoles : Map__605269027<Principal, UserRole__1054455867>
+    };
+  in logs : List__415060402<Log__105830546>;
+  in nextLogId : {var value : Nat};
+  in nextProductId : {var value : Nat};
+  in products : Map__605269027<Nat, Product__750902660>;
+  in seeded : {var value : Bool};
+  in users : Map__605269027<Text, OldUser__433019771>
+}, {
+  stable accessControlState :
+    {
+      var adminAssigned : Bool;
+      userRoles : Map__605269027<Principal, UserRole__1054455867>
+    };
+  stable logs :
+    {
+      var blockIndex : Nat__490723111;
+      var blocks : [var [var ?Log__105830546]];
+      var elementIndex : Nat__490723111
+    };
+  stable nextLogId : {var value : Nat};
+  stable nextProductId : {var value : Nat};
+  stable products :
+    {
+      var root : Node__46230540<ProductId__160010635, Product__750902660>;
+      var size : Nat__490723111
+    };
+  stable seeded : {var value : Bool};
+  stable users :
+    {
+      var root : Node__46230540<Text, User__98118558>;
+      var size : Nat__490723111
+    }
+}) ;
